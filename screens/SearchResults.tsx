@@ -3,54 +3,81 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ScreenId, CompatibilityResult } from '../types';
 import { Header, Card, Icon, Badge, Button, Modal } from '../components/UI';
 
-interface SearchResultsProps {
-  onNavigate: (screen: ScreenId) => void;
-  onBack: () => void;
-  activeVehicle: string;
-  onProfile?: () => void;
-}
-
 const Product3DViewer: React.FC<{ imageUrl: string; isFullScreen?: boolean; onClose?: () => void }> = ({ imageUrl, isFullScreen, onClose }) => {
   const [rotation, setRotation] = useState(0);
   const [zoom, setZoom] = useState(1);
   const isDragging = useRef(false);
   const lastX = useRef(0);
   const lastY = useRef(0);
+  const initialPinchDistance = useRef<number | null>(null);
+  const lastZoom = useRef(1);
 
-  const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
-    isDragging.current = true;
-    const clientX = 'touches' in e ? (e as React.TouchEvent).touches[0].clientX : (e as React.MouseEvent).clientX;
-    const clientY = 'touches' in e ? (e as React.TouchEvent).touches[0].clientY : (e as React.MouseEvent).clientY;
-    lastX.current = clientX;
-    lastY.current = clientY;
+  const getDistance = (touches: React.TouchList) => {
+    return Math.hypot(
+      touches[0].pageX - touches[1].pageX,
+      touches[0].pageY - touches[1].pageY
+    );
   };
 
-  const handleMouseMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDragging.current) return;
-    const clientX = 'touches' in e ? (e as React.TouchEvent).touches[0].clientX : (e as React.MouseEvent).clientX;
-    const clientY = 'touches' in e ? (e as React.TouchEvent).touches[0].clientY : (e as React.MouseEvent).clientY;
-    
-    const deltaX = clientX - lastX.current;
-    const deltaY = clientY - lastY.current;
-    
-    setRotation(prev => prev + deltaX * 0.8);
-    
-    if (isFullScreen) {
-      const zoomDelta = deltaY * -0.005;
-      setZoom(prev => Math.min(Math.max(0.5, prev + zoomDelta), 3));
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      initialPinchDistance.current = getDistance(e.touches);
+      lastZoom.current = zoom;
+    } else if (e.touches.length === 1) {
+      isDragging.current = true;
+      lastX.current = e.touches[0].clientX;
+      lastY.current = e.touches[0].clientY;
     }
-    
-    lastX.current = clientX;
-    lastY.current = clientY;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && initialPinchDistance.current !== null) {
+      e.preventDefault();
+      const currentDistance = getDistance(e.touches);
+      const scale = currentDistance / initialPinchDistance.current;
+      const nextZoom = Math.min(Math.max(0.5, lastZoom.current * scale), 4);
+      setZoom(nextZoom);
+    } else if (e.touches.length === 1 && isDragging.current) {
+      const clientX = e.touches[0].clientX;
+      const deltaX = clientX - lastX.current;
+      setRotation(prev => prev + deltaX * 0.8);
+      lastX.current = clientX;
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (e.touches.length < 2) {
+      initialPinchDistance.current = null;
+    }
+    if (e.touches.length === 0) {
+      isDragging.current = false;
+    }
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isDragging.current = true;
+    lastX.current = e.clientX;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current) return;
+    const deltaX = e.clientX - lastX.current;
+    setRotation(prev => prev + deltaX * 0.8);
+    lastX.current = e.clientX;
   };
 
   const stopDragging = () => {
     isDragging.current = false;
   };
 
+  const handleWheel = (e: React.WheelEvent) => {
+    const delta = e.deltaY * -0.001;
+    setZoom(prev => Math.min(Math.max(0.5, prev + delta), 4));
+  };
+
   if (isFullScreen) {
     return (
-      <div className="fixed inset-0 z-[250] bg-black/95 flex flex-col items-center justify-center animate-ios backdrop-blur-xl">
+      <div className="fixed inset-0 z-[250] bg-black/95 flex flex-col items-center justify-center animate-ios backdrop-blur-xl touch-none">
         <div className="absolute top-12 left-6 z-[260]">
           <h2 className="text-white font-black text-[10px] uppercase tracking-[0.3em]">360° Technical Inspection</h2>
         </div>
@@ -59,8 +86,10 @@ const Product3DViewer: React.FC<{ imageUrl: string; isFullScreen?: boolean; onCl
         </button>
         
         <div 
-          className="w-full h-full flex items-center justify-center touch-none cursor-grab active:cursor-grabbing" 
-          onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={stopDragging} onMouseLeave={stopDragging} onTouchStart={handleMouseDown} onTouchMove={handleMouseMove} onTouchEnd={stopDragging}
+          className="w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing" 
+          onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={stopDragging} onMouseLeave={stopDragging} 
+          onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}
+          onWheel={handleWheel}
         >
           <div style={{ transform: `rotateY(${rotation}deg) scale(${zoom})`, perspective: '2000px', transition: isDragging.current ? 'none' : 'transform 0.1s linear' }}>
             <img src={imageUrl} alt="Product" className="max-w-[300px] max-h-[400px] object-contain drop-shadow-[0_60px_100px_rgba(200,16,46,0.3)] select-none" draggable={false} />
@@ -68,29 +97,41 @@ const Product3DViewer: React.FC<{ imageUrl: string; isFullScreen?: boolean; onCl
         </div>
 
         <div className="absolute bottom-12 flex flex-col items-center space-y-2">
-          <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.4em]">Drag to Rotate • Pinch to Zoom</p>
+          <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.4em]">Pinch to Zoom • Drag to Rotate</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full h-[220px] bg-[#F8F9FA] flex items-center justify-center rounded-[32px] overflow-hidden border border-gray-100 shadow-inner">
+    <div className="relative w-full h-[240px] bg-[#F8F9FA] flex items-center justify-center rounded-[32px] overflow-hidden border border-gray-100 shadow-inner touch-none">
       <div 
         className="w-full h-full flex flex-col items-center justify-center transition-transform duration-75 cursor-grab active:cursor-grabbing" 
-        style={{ transform: `rotateY(${rotation}deg)`, perspective: '1000px' }}
-        onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={stopDragging} onMouseLeave={stopDragging} onTouchStart={handleMouseDown} onTouchMove={handleMouseMove} onTouchEnd={stopDragging}
+        style={{ perspective: '1000px' }}
+        onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={stopDragging} onMouseLeave={stopDragging}
+        onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}
+        onWheel={handleWheel}
       >
-        <img src={imageUrl} alt="Part" className="max-w-[140px] max-h-[140px] object-contain drop-shadow-2xl" />
-        <p className="text-[8px] font-black text-gray-300 uppercase tracking-[0.2em] mt-3">DRAG TO ROTATE 3D VIEW</p>
+        <div style={{ transform: `rotateY(${rotation}deg) scale(${zoom})`, transition: isDragging.current ? 'none' : 'transform 0.1s linear' }}>
+          <img src={imageUrl} alt="Part" className="max-w-[140px] max-h-[140px] object-contain drop-shadow-2xl select-none" draggable={false} />
+        </div>
+        <p className="text-[8px] font-black text-gray-300 uppercase tracking-[0.2em] mt-3">PINCH TO MAGNIFY • DRAG TO ROTATE</p>
       </div>
-      <div className="absolute top-4 left-4 bg-[#C8102E] text-white text-[7px] font-black px-2.5 py-1 rounded-md uppercase tracking-[0.1em] shadow-lg shadow-red-500/10 flex items-center space-x-1">
+      <div className="absolute top-4 left-4 bg-[#C8102E] text-white text-[7px] font-black px-2.5 py-1 rounded-md uppercase tracking-[0.1em] shadow-lg shadow-red-500/10 flex items-center space-x-1 pointer-events-none">
         <div className="w-1 h-1 bg-white rounded-full animate-pulse"></div>
-        <span>3D INTERACTIVE</span>
+        <span>3D MAGNIFICATION</span>
       </div>
     </div>
   );
 };
+
+// Interface for SearchResults component props
+interface SearchResultsProps {
+  onNavigate: (screen: ScreenId) => void;
+  onBack: () => void;
+  activeVehicle: string;
+  onProfile?: () => void;
+}
 
 const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activeVehicle, onProfile }) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -98,7 +139,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
   const [isCheckingStock, setIsCheckingStock] = useState(false);
   const [stockStatus, setStockStatus] = useState<string | null>(null);
   
-  // Swipe Logic Refs
+  // Swipe Logic Refs for card navigation
   const touchStartX = useRef<number | null>(null);
   const swipeMinDistance = 60;
 
@@ -160,11 +201,14 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
     }
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
+  const handleContainerTouchStart = (e: React.TouchEvent) => {
+    // Only handle swipe if it's 1 finger and not on the 3D viewer (which uses touch-none)
+    if (e.touches.length === 1) {
+      touchStartX.current = e.touches[0].clientX;
+    }
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleContainerTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null || selectedIndex === null) return;
     
     const touchEndX = e.changedTouches[0].clientX;
@@ -217,11 +261,11 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
       >
         <div 
           className="flex flex-col h-full bg-white relative animate-ios touch-pan-y"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          onTouchStart={handleContainerTouchStart}
+          onTouchEnd={handleContainerTouchEnd}
         >
           {/* Swiper Progress Dots */}
-          <div className="absolute top-0 left-0 right-0 flex justify-center space-x-1.5 py-1 z-30">
+          <div className="absolute top-0 left-0 right-0 flex justify-center space-x-1.5 py-1 z-30 pointer-events-none">
             {results.map((_, idx) => (
               <div 
                 key={idx} 
@@ -230,33 +274,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
             ))}
           </div>
 
-          {/* Navigation Arrows */}
-          {selectedIndex !== null && selectedIndex > 0 && (
-            <button 
-              onClick={(e) => { e.stopPropagation(); handlePrevProduct(); }}
-              className="absolute left-2 top-[110px] z-40 bg-white/60 backdrop-blur-sm p-2.5 rounded-full shadow-lg border border-gray-100 active:scale-90 transition-all text-[#C8102E]"
-              aria-label="Previous Product"
-            >
-              <svg className="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          )}
-
-          {selectedIndex !== null && selectedIndex < results.length - 1 && (
-            <button 
-              onClick={(e) => { e.stopPropagation(); handleNextProduct(); }}
-              className="absolute right-2 top-[110px] z-40 bg-white/60 backdrop-blur-sm p-2.5 rounded-full shadow-lg border border-gray-100 active:scale-90 transition-all text-[#C8102E]"
-              aria-label="Next Product"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          )}
-
           <div className="flex-1 overflow-y-auto p-6 pt-2 space-y-5 pb-[140px]">
-            <section className="animate-ios" onClick={() => setIsFullScreen(true)}>
+            <section className="animate-ios" onDoubleClick={() => setIsFullScreen(true)}>
               <Product3DViewer imageUrl={selectedProduct?.imageUrl || ''} />
             </section>
 

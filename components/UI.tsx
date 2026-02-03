@@ -63,6 +63,29 @@ export const Card: React.FC<{ children: React.ReactNode; className?: string; onC
   );
 };
 
+// Icon component for consistent SVG usage across the app
+export const Icon: React.FC<{ name: string; className?: string }> = ({ name, className = "w-6 h-6" }) => {
+  switch (name) {
+    case 'home': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>;
+    case 'car': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" /></svg>;
+    case 'search': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>;
+    case 'heart': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>;
+    case 'chat': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>;
+    case 'map': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 7m0 10V7" /></svg>;
+    case 'cog': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
+    case 'plus': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>;
+    case 'user': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>;
+    case 'store': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>;
+    case 'truck': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" /></svg>;
+    case 'arrow-right': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>;
+    case 'check': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
+    case 'close': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>;
+    case 'info': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+    case 'camera': return <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
+    default: return null;
+  }
+};
+
 export const Header: React.FC<{ 
   title: string; 
   onBack?: () => void; 
@@ -105,187 +128,139 @@ export const Header: React.FC<{
 
 export const Drawer: React.FC<{ isOpen: boolean; onClose: () => void; onNavigate: (screen: any) => void; onLogout?: () => void; role?: string | null }> = ({ isOpen, onClose, onNavigate, onLogout, role }) => {
   if (!isOpen) return null;
-  const isPro = role === 'Distributor' || role === 'Reseller';
   
-  const menuItems = isPro ? [
-    { id: 'user_home', label: 'Home', icon: 'home' },
-    { id: 'catalog_search', label: 'Catalog', icon: 'search' },
-    { id: 'my_enquiries', label: 'Enquiries', icon: 'cog' },
-    { id: 'favorites', label: 'Favorites', icon: 'heart' },
-    { id: 'dealer_locator', label: 'Dealer Finder', icon: 'store' },
-  ] : [
-    { id: 'user_home', label: 'Home', icon: 'home' },
-    { id: 'my_garage', label: 'My Garage', icon: 'car' },
-    { id: 'catalog_search', label: 'Catalog Search', icon: 'search' },
-    { id: 'favorites', label: 'My Favorites', icon: 'heart' },
-    { id: 'my_enquiries', label: 'My Enquiries', icon: 'cog' },
-    { id: 'dealer_locator', label: 'Dealer Finder', icon: 'store' },
+  const sections = [
+    {
+      title: 'Navigation',
+      items: [
+        { id: 'user_home', label: 'Home', icon: 'home' },
+        { id: 'my_garage', label: 'Garage', icon: 'car' },
+      ]
+    },
+    {
+      title: 'Catalog',
+      items: [
+        { id: 'catalog_search', label: 'Parts Finder', icon: 'search' },
+        { id: 'favorites', label: 'Watchlist', icon: 'heart' },
+      ]
+    },
+    {
+      title: 'Support',
+      items: [
+        { id: 'my_enquiries', label: 'Enquiries', icon: 'chat' },
+        { id: 'dealer_locator', label: 'Depots', icon: 'map' },
+      ]
+    }
   ];
 
   return (
     <div className="absolute inset-0 z-[200]">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-md transition-opacity" onClick={onClose} />
-      <div className="absolute top-0 left-0 h-full w-[85%] max-w-[320px] bg-white shadow-2xl animate-ios-drawer flex flex-col overflow-hidden">
-        <div className="pt-16 pb-8 px-6 bg-[#F8F9FB] border-b border-zinc-100 relative">
-          <div className="flex items-center space-x-4">
-            <div 
-              onClick={() => { onNavigate('user_profile'); onClose(); }}
-              className="w-16 h-16 rounded-[22px] border-2 border-[#C8102E] p-1 bg-white shadow-xl active:scale-95 transition-transform cursor-pointer"
-            >
-              <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150" alt="Profile" className="w-full h-full object-cover rounded-[16px]" />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={onClose} />
+      <div className="absolute top-0 left-0 h-full w-[80%] max-w-[280px] bg-[#0E1320] shadow-2xl animate-ios-drawer flex flex-col overflow-hidden text-white border-r border-white/5">
+        
+        <div className="pt-16 pb-8 px-6 flex items-center space-x-4">
+          <div className="relative">
+            <div className="w-12 h-12 rounded-full border border-white/20 p-0.5 bg-zinc-800 overflow-hidden shadow-lg">
+              <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100" alt="Karri" className="w-full h-full object-cover rounded-full" />
             </div>
-            <div className="flex-1">
-              <h3 className="font-black text-xl text-black uppercase tracking-tight leading-tight">Admin Portal</h3>
-              <p className="text-[10px] font-black text-[#C8102E] uppercase tracking-widest mt-0.5">{role || 'Master User'}</p>
-            </div>
+          </div>
+          <div className="flex flex-col">
+            <h3 className="font-bold text-base text-white truncate w-32">Johnathan Doe</h3>
+            <p className="text-[10px] font-bold text-[#C8102E] uppercase tracking-widest mt-0.5">{role || 'END USER'}</p>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-8 space-y-2">
-          {menuItems.map((item) => (
-            <button 
-              key={item.id}
-              onClick={() => { onNavigate(item.id); onClose(); }}
-              className="w-full group flex items-center space-x-4 px-4 py-4 rounded-2xl transition-all active:bg-zinc-100 hover:bg-zinc-50"
-            >
-              <div className="w-10 h-10 rounded-xl bg-zinc-50 flex items-center justify-center text-zinc-400 group-hover:bg-red-50 group-hover:text-[#C8102E] transition-colors shadow-sm">
-                <Icon name={item.icon} className="w-5 h-5" />
-              </div>
-              <span className="text-xs font-black text-zinc-600 uppercase tracking-widest group-hover:text-black transition-colors">{item.label}</span>
-            </button>
-          ))}
-          {isPro && (
-            <button 
-              onClick={onLogout}
-              className="w-full group flex items-center space-x-4 px-4 py-4 rounded-2xl transition-all active:bg-red-50 hover:bg-red-50 mt-4 border border-dashed border-red-100"
-            >
-              <div className="w-10 h-10 rounded-xl bg-white border border-red-100 flex items-center justify-center text-[#C8102E] shadow-sm">
-                <Icon name="close" className="w-4 h-4" />
-              </div>
-              <span className="text-xs font-black text-[#C8102E] uppercase tracking-widest transition-colors">Sign Out</span>
-            </button>
-          )}
-        </div>
+        <div className="h-[1px] w-full bg-white/5" />
 
-        <div className="p-6 border-t border-zinc-100 bg-[#F8F9FB]">
-           {!isPro && (
+        <div className="flex-1 overflow-y-auto py-6 space-y-8">
+          {sections.map((section) => (
+            <div key={section.title} className="px-6 space-y-4">
+              <h4 className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">{section.title}</h4>
+              <div className="space-y-1">
+                {section.items.map((item) => (
+                  <button 
+                    key={item.id}
+                    onClick={() => { onNavigate(item.id); onClose(); }}
+                    className="w-full flex items-center space-x-4 py-3 px-3 -ml-3 rounded-xl transition-all active:bg-white/5 hover:bg-white/5 group"
+                  >
+                    <div className="text-white/40 group-hover:text-white group-active:text-[#C8102E] transition-colors">
+                      <Icon name={item.icon} className="w-5 h-5" />
+                    </div>
+                    <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">{item.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <div className="px-6 space-y-4 pt-4 border-t border-white/5">
+             <h4 className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">More</h4>
              <button 
-              onClick={onLogout}
-              className="w-full group flex items-center justify-center space-x-3 py-5 rounded-2xl bg-white border border-zinc-200 shadow-sm active:scale-[0.98] active:bg-red-50 transition-all"
+                onClick={() => { onNavigate('user_profile'); onClose(); }}
+                className="w-full flex items-center space-x-4 py-3 px-3 -ml-3 rounded-xl transition-all hover:bg-white/5 group"
              >
-               <div className="w-6 h-6 rounded-full border border-red-200 flex items-center justify-center text-[#C8102E] group-active:border-red-500">
-                  <Icon name="close" className="w-3.5 h-3.5" />
-               </div>
-               <span className="text-[11px] font-black text-zinc-900 uppercase tracking-[0.2em]">Sign Out</span>
+                <div className="text-white/40 group-hover:text-white transition-colors">
+                  <Icon name="cog" className="w-5 h-5" />
+                </div>
+                <span className="text-sm font-medium text-white/80 group-hover:text-white">Settings</span>
              </button>
-           )}
-           <p className="text-center text-[8px] font-black text-zinc-400 uppercase mt-4 tracking-widest">NGK Technical Portal v4.2.0</p>
+             <button 
+                onClick={onLogout}
+                className="w-full flex items-center space-x-4 py-3 px-3 -ml-3 rounded-xl transition-all hover:bg-white/5 group"
+             >
+                <div className="text-white/40 group-hover:text-white transition-colors">
+                  <Icon name="close" className="w-5 h-5" />
+                </div>
+                <span className="text-sm font-medium text-white/80 group-hover:text-white">Sign Out</span>
+             </button>
+          </div>
         </div>
       </div>
-      <style>{`
-        @keyframes drawerSlide {
-          from { transform: translateX(-100%); }
-          to { transform: translateX(0); }
-        }
-        .animate-ios-drawer {
-          animation: drawerSlide 0.5s cubic-bezier(0.32, 1, 0.23, 1) forwards;
-        }
-      `}</style>
     </div>
   );
 };
 
-export const RoleFooter: React.FC<{ activeTab: string; onNavigate: (screen: any) => void; role?: string | null }> = ({ activeTab, onNavigate, role }) => {
-  const isDistributor = role === 'Distributor';
-  
-  const tabs = [
-    { id: 'user_home', label: 'Home', icon: 'home' },
-    { id: 'my_enquiries', label: 'Enquiries', icon: 'cog' },
-    { id: 'catalog_search', label: 'Search', icon: 'search' },
-    { id: 'favorites', label: 'Favorites', icon: 'heart' },
-    { id: 'user_profile', label: 'Profile', icon: 'user' },
-  ];
-
-  return (
-    <nav className={`safe-area-padding-bottom border-t flex justify-around items-center px-1 py-3 shrink-0 shadow-2xl z-[100] ${isDistributor ? 'bg-zinc-950 border-white/5' : 'bg-white border-zinc-100'}`}>
-      {tabs.map((tab) => {
-        const isActive = activeTab === tab.id;
-        return (
-          <button 
-            key={tab.id}
-            onClick={() => onNavigate(tab.id)} 
-            className={`flex-1 flex flex-col items-center space-y-1 transition-all active:scale-90 ${
-              isActive 
-                ? (isDistributor ? 'text-[#C8102E]' : 'text-[#C8102E]') 
-                : (isDistributor ? 'text-zinc-500' : 'text-zinc-400')
-            }`}
-          >
-            <Icon name={tab.icon} className="w-5 h-5" />
-            <span className={`text-[8px] font-black uppercase tracking-widest ${isActive ? 'opacity-100' : 'opacity-70'}`}>{tab.label}</span>
-          </button>
-        );
-      })}
-    </nav>
-  );
-};
-
-export const Modal: React.FC<{ 
-  isOpen: boolean; 
-  onClose: () => void; 
-  title: string; 
-  children: React.ReactNode 
-}> = ({ isOpen, onClose, title, children }) => {
+// Modal component for showing detailed content overlays
+export const Modal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }> = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
   return (
-    <div className="absolute inset-0 z-[150] flex flex-col">
+    <div className="fixed inset-0 z-[200] flex flex-col justify-end">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative mt-auto w-full bg-white rounded-t-[32px] shadow-2xl animate-ios-slide-up flex flex-col max-h-[92%] overflow-hidden">
-        <div className="sticky top-0 bg-white/80 backdrop-blur-md px-6 py-4 border-b border-zinc-100 flex items-center justify-between z-20">
-          <h2 className="text-sm font-black text-black uppercase tracking-widest">{title}</h2>
-          <button onClick={onClose} className="p-2 -mr-2 text-zinc-500 active:scale-90 transition-transform hover:text-black">
-            <Icon name="close" className="w-6 h-6" />
+      <div className="relative bg-white w-full h-[92%] rounded-t-[40px] shadow-2xl flex flex-col overflow-hidden animate-ios-slide-up">
+        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
+          <h3 className="font-black text-xs uppercase tracking-[0.2em] text-gray-400">{title}</h3>
+          <button onClick={onClose} className="p-2 -mr-2 text-gray-300 active:scale-90 transition-transform">
+             <Icon name="close" className="w-6 h-6" />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto bg-white">
+        <div className="flex-1 overflow-y-auto">
           {children}
         </div>
       </div>
-      <style>{`
-        @keyframes slideUp {
-          from { transform: translateY(100%); }
-          to { transform: translateY(0); }
-        }
-        .animate-ios-slide-up {
-          animation: slideUp 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        }
-      `}</style>
     </div>
   );
 };
 
-export const Icon: React.FC<{ name: string; className?: string }> = ({ name, className = "w-6 h-6" }) => {
-  const icons: Record<string, React.ReactNode> = {
-    user: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />,
-    store: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />,
-    truck: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0zM13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />,
-    car: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />,
-    search: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />,
-    heart: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />,
-    home: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />,
-    cog: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />,
-    close: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />,
-    refresh: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />,
-    info: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />,
-    camera: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z" />,
-    plus: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />,
-    "arrow-right": <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />,
-    "google": <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />,
-    check: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />,
-  };
-
+// RoleFooter component for role-specific bottom navigation
+export const RoleFooter: React.FC<{ activeTab: string; onNavigate: (screen: any) => void; role: string }> = ({ activeTab, onNavigate, role }) => {
+  const isProfessional = role === 'Reseller' || role === 'Distributor';
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      {icons[name] || <circle cx="12" cy="12" r="10" />}
-    </svg>
+    <nav className={`ios-footer safe-area-padding-bottom border-t border-white/10 flex justify-around items-center px-1 py-4 shrink-0 shadow-2xl ${isProfessional ? 'bg-zinc-950' : 'bg-white'}`}>
+      {[
+        { id: 'user_home', label: 'Portal', icon: 'home' },
+        { id: 'catalog_search', label: 'Search', icon: 'search' },
+        { id: 'my_enquiries', label: isProfessional ? 'Inbox' : 'Enquiries', icon: 'cog' },
+        { id: 'dealer_locator', label: isProfessional ? 'Depots' : 'Dealers', icon: 'store' },
+      ].map((tab) => (
+        <button 
+          key={tab.id}
+          onClick={() => onNavigate(tab.id)} 
+          className={`flex-1 flex flex-col items-center space-y-1.5 transition-colors ${activeTab === tab.id ? 'text-white' : (isProfessional ? 'text-white/40' : 'text-zinc-400')}`}
+        >
+          <Icon name={tab.icon} className="w-6 h-6" />
+          <span className="text-[9px] font-black uppercase tracking-[0.05em]">{tab.label}</span>
+        </button>
+      ))}
+    </nav>
   );
 };
