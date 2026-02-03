@@ -1,0 +1,8 @@
+{
+  "name": "NGK",
+  "description": "Premium automotive parts catalog and technical enquiry system designed with Apple Human Interface Guidelines.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
