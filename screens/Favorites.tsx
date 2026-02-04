@@ -341,7 +341,7 @@ const Favorites: React.FC<FavoritesProps> = ({ onNavigate, onBack, onProfile }) 
       <Modal 
         isOpen={!!selectedProduct} 
         onClose={() => { setSelectedIdx(null); setStockStatus(null); setGeneratedModelUrl(null); }} 
-        title={selectedProduct?.partNo || "PART DETAILS"}
+        title="PRODUCT DETAILS"
       >
         <div 
           className="flex flex-col h-full bg-white relative animate-ios touch-pan-y"

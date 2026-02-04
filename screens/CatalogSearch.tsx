@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { ScreenId } from '../types';
 import { Header, Icon, Button } from '../components/UI';
@@ -8,24 +7,23 @@ interface CatalogSearchProps {
   onBack: () => void;
   state: any;
   setState: React.Dispatch<React.SetStateAction<any>>;
-  // Added onProfile prop to fix TypeScript error in App.tsx
   onProfile?: () => void;
 }
 
 const POPULAR_BRANDS = [
-  { name: 'Audi', logo: 'https://www.carlogos.org/car-logos/audi-logo-2016-640.png' },
-  { name: 'BMW', logo: 'https://www.carlogos.org/car-logos/bmw-logo-2020-640.png' },
-  { name: 'Mercedes-Benz', logo: 'https://www.carlogos.org/car-logos/mercedes-benz-logo-2011-640.png' },
-  { name: 'Volkswagen', logo: 'https://www.carlogos.org/car-logos/volkswagen-logo-2019-640.png' },
-  { name: 'Toyota', logo: 'https://www.carlogos.org/car-logos/toyota-logo-2020-640.png' },
-  { name: 'Honda', logo: 'https://www.carlogos.org/car-logos/honda-logo-1700x1150.png' },
-  { name: 'Ford', logo: 'https://www.carlogos.org/car-logos/ford-logo-2017-640.png' },
-  { name: 'Nissan', logo: 'https://www.carlogos.org/car-logos/nissan-logo-2020-640.png' },
-  { name: 'Hyundai', logo: 'https://www.carlogos.org/car-logos/hyundai-logo-640.png' },
+  { name: 'Audi', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Audi-Logo_2016.svg/256px-Audi-Logo_2016.svg.png' },
+  { name: 'BMW', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/256px-BMW.svg.png' },
+  { name: 'Mercedes-Benz', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/256px-Mercedes-Logo.svg.png' },
+  { name: 'Volkswagen', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/256px-Volkswagen_logo_2019.svg.png' },
+  { name: 'Toyota', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Toyota_logo_%282020%29.svg/256px-Toyota_logo_%282020%29.svg.png' },
+  { name: 'Honda', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Honda.svg/256px-Honda.svg.png' },
+  { name: 'Ford', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ford_logo_flat.svg/256px-Ford_logo_flat.svg.png' },
+  { name: 'Nissan', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nissan_logo.svg/256px-Nissan_logo.svg.png' },
+  { name: 'Hyundai', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Hyundai_Motor_Company_logo.svg/256px-Hyundai_Motor_Company_logo.svg.png' },
 ];
 
 const CATALOG_DATA = {
-  "Vehicle": {
+  "Passenger": {
     "Audi": {
       "A1": ["80, 82, (B1)"],
       "A3": ["S/Wagon"],
@@ -59,12 +57,43 @@ const CATALOG_DATA = {
       "Tiguan": ["162 TSI", "110 TDI"]
     }
   },
-  "Commercial": {
-    "Mercedes-Benz": {
-      "Sprinter": ["314 CDI", "316 CDI"],
-      "Vito": ["114 CDI", "116 CDI"]
-    }
+  "Motorcycle": {
+    "Honda": { "CBR 1000RR": ["2020+"], "Africa Twin": ["All"] },
+    "BMW": { "S1000RR": ["2019+"], "R1250GS": ["All"] },
+    "Yamaha": { "R1": ["2015+"], "MT-07": ["All"] }
+  },
+  "Garden equipment": {
+    "Husqvarna": { "Automower": ["All"] },
+    "Stihl": { "MS 170": ["Chain Saw"] }
+  },
+  "Go Cart": {
+    "Rotax": { "Max": ["125 Evo"] },
+    "IAME": { "X30": ["125cc"] }
+  },
+  "Construction machine": {
+    "Caterpillar": { "320D": ["Excavator"] },
+    "JCB": { "3CX": ["Backhoe Loader"] }
+  },
+  "Marine": {
+    "Yamaha": { "F150": ["Outboard"] },
+    "Mercury": { "Verado": ["All"] }
   }
+};
+
+const APP_TYPES = [
+  "Passenger",
+  "Motorcycle",
+  "Garden equipment",
+  "Go Cart",
+  "Construction machine",
+  "Marine"
+];
+
+const STEP_TITLES: Record<number, string> = {
+  1: 'Application Setup',
+  2: 'Manufacturer Setup',
+  3: 'Series Selection',
+  4: 'Variant Selection'
 };
 
 const CatalogSearch: React.FC<CatalogSearchProps> = ({ onNavigate, onBack, state, setState, onProfile }) => {
@@ -86,8 +115,7 @@ const CatalogSearch: React.FC<CatalogSearchProps> = ({ onNavigate, onBack, state
     if (!manufacture || !make) return [];
     const typeData = CATALOG_DATA[appType as keyof typeof CATALOG_DATA];
     const mfgData = typeData ? (typeData as any)[manufacture] : null;
-    const makeData = mfgData ? mfgData[make] : null;
-    return makeData || [];
+    return mfgData ? (mfgData as any)[make] : [];
   }, [appType, manufacture, make]);
 
   const updateState = (updates: any) => setState((prev: any) => ({ ...prev, ...updates }));
@@ -114,7 +142,6 @@ const CatalogSearch: React.FC<CatalogSearchProps> = ({ onNavigate, onBack, state
 
   const isStepValid = () => {
     if (searchMode === 'part') return partNumber.length >= 3;
-    
     if (currentStep === 1) return !!appType;
     if (currentStep === 2) return !!manufacture;
     if (currentStep === 3) return !!make;
@@ -124,20 +151,24 @@ const CatalogSearch: React.FC<CatalogSearchProps> = ({ onNavigate, onBack, state
 
   const recentSearches = searchMode === 'vehicle' ? ['Audi A4 (2022)', 'VW Golf GTI'] : ['BKR6EIX-11', 'OZA603-N18'];
 
+  const getStepTitle = () => {
+    if (searchMode === 'part') return 'Global Lookup';
+    return STEP_TITLES[currentStep] || 'Vehicle Setup';
+  };
+
   return (
     <div className="flex-1 bg-white flex flex-col h-full overflow-hidden">
-      {/* Pass onProfile to fix prop error */}
-      <Header title="Product Discovery" onBack={handleHeaderBack} onProfile={onProfile} />
+      <Header title="PARTS FINDER" onBack={handleHeaderBack} onProfile={onProfile} />
       
-      <div className="flex-1 overflow-y-auto p-5 animate-ios flex flex-col pb-32">
-        <section className="mb-6 shrink-0">
-          <h4 className="text-[10px] font-bold text-gray-400 uppercase ml-1 mb-3 tracking-widest">Recently Searched</h4>
-          <div className="flex flex-wrap gap-2">
+      <div className="flex-1 overflow-y-auto p-6 animate-ios flex flex-col pb-40">
+        <section className="mb-8 shrink-0">
+          <h4 className="text-[11px] font-poppins font-black text-black uppercase ml-1 mb-4 tracking-[0.2em]">Recently Searched</h4>
+          <div className="flex flex-wrap gap-3">
             {recentSearches.map((s, i) => (
               <button 
                 key={i} 
                 onClick={() => searchMode === 'vehicle' ? updateState({ manufacture: s.split(' ')[0], make: s.split(' ')[1] }) : updateState({ partNumber: s })}
-                className="bg-[#F2F2F7] px-4 py-2 rounded-full text-[11px] font-bold text-gray-700 active:scale-95 transition-transform"
+                className="bg-zinc-100 border border-zinc-200 px-5 py-3 rounded-2xl text-[12px] font-poppins font-black text-black active:scale-95 transition-transform"
               >
                 {s}
               </button>
@@ -145,27 +176,45 @@ const CatalogSearch: React.FC<CatalogSearchProps> = ({ onNavigate, onBack, state
           </div>
         </section>
 
-        <div className="bg-gray-100 p-1 rounded-2xl flex mb-8 shrink-0">
+        <div className="bg-zinc-100 p-1.5 rounded-[24px] flex mb-10 shrink-0 border border-zinc-200 shadow-inner">
           <button 
             onClick={() => updateState({ searchMode: 'vehicle' })}
-            className={`flex-1 py-3 text-xs font-bold rounded-xl transition-all ${searchMode === 'vehicle' ? 'bg-white shadow-sm text-[#0B0F1A]' : 'text-gray-400'}`}
+            className={`flex-1 py-4 text-[12px] font-poppins font-black rounded-2xl transition-all uppercase tracking-widest ${searchMode === 'vehicle' ? 'bg-white shadow-md text-black' : 'text-zinc-950 opacity-60'}`}
           >
             Vehicle Finder
           </button>
           <button 
             onClick={() => updateState({ searchMode: 'part' })}
-            className={`flex-1 py-3 text-xs font-bold rounded-xl transition-all ${searchMode === 'part' ? 'bg-white shadow-sm text-[#0B0F1A]' : 'text-gray-400'}`}
+            className={`flex-1 py-4 text-[12px] font-poppins font-black rounded-2xl transition-all uppercase tracking-widest ${searchMode === 'part' ? 'bg-white shadow-md text-black' : 'text-zinc-950 opacity-60'}`}
           >
             Part Number
           </button>
         </div>
 
-        <div className="flex justify-between items-end border-b border-gray-100 pb-2 mb-8 shrink-0">
-          <h2 className="text-xl font-bold text-[#0B0F1A]">
-            {searchMode === 'vehicle' ? 'Vehicle Details' : 'Component Lookup'}
+        <div className="flex justify-between items-end border-b-2 border-zinc-100 pb-4 mb-10 shrink-0 min-h-[48px]">
+          <h2 className="text-xl font-poppins font-black text-black uppercase tracking-tight">
+            {getStepTitle()}
           </h2>
           {searchMode === 'vehicle' && (
-            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Step {currentStep} of 4</span>
+            <div className="flex items-center space-x-2 pb-0.5">
+              {[1, 2, 3, 4].map((stepNum) => (
+                <button
+                  key={stepNum}
+                  onClick={() => updateState({ currentStep: stepNum })}
+                  className={`flex items-center justify-center rounded-xl transition-all duration-300 active:scale-90 ${
+                    stepNum === currentStep 
+                      ? 'bg-[#C8102E] text-white w-14 h-7 shadow-lg' 
+                      : stepNum < currentStep 
+                        ? 'bg-zinc-950 text-white w-7 h-7' 
+                        : 'bg-zinc-100 text-zinc-400 w-7 h-7 border border-zinc-200 opacity-50'
+                  }`}
+                >
+                  <span className="text-[10px] font-poppins font-black">
+                    {stepNum === currentStep ? `S${stepNum}` : stepNum}
+                  </span>
+                </button>
+              ))}
+            </div>
           )}
         </div>
 
@@ -173,10 +222,10 @@ const CatalogSearch: React.FC<CatalogSearchProps> = ({ onNavigate, onBack, state
           {searchMode === 'vehicle' ? (
             <>
               {currentStep === 1 && (
-                <section className="space-y-4 animate-ios">
-                  <label className="text-[11px] font-extrabold text-[#0B0F1A] uppercase ml-1 tracking-widest">1. Application Type</label>
-                  <div className="grid grid-cols-1 gap-3">
-                    {['Vehicle', 'Commercial'].map(type => (
+                <section className="space-y-6 animate-ios">
+                  <label className="text-[11px] font-poppins font-black text-black uppercase ml-1 tracking-[0.2em]">1. Choose Application</label>
+                  <div className="grid grid-cols-1 gap-4">
+                    {APP_TYPES.map(type => (
                       <button 
                         key={type}
                         onClick={() => updateState({ 
@@ -186,10 +235,10 @@ const CatalogSearch: React.FC<CatalogSearchProps> = ({ onNavigate, onBack, state
                           model: '',
                           currentStep: 2
                         })}
-                        className={`py-6 rounded-2xl font-bold text-base border-2 transition-all flex items-center justify-between px-6 ${appType === type ? 'border-[#C8102E] bg-red-50 text-[#C8102E]' : 'border-gray-50 bg-gray-50 text-gray-400'}`}
+                        className={`py-6 rounded-3xl font-poppins font-black text-base border-2 transition-all flex items-center justify-between px-8 ${appType === type ? 'border-[#C8102E] bg-red-50 text-[#C8102E]' : 'border-zinc-100 bg-white text-black hover:border-zinc-950 shadow-sm'}`}
                       >
-                        <span className="font-extrabold">{type === 'Vehicle' ? 'Passenger Vehicle' : 'Commercial Vehicle'}</span>
-                        {appType === type && <Icon name="check" className="w-5 h-5 text-[#C8102E]" />}
+                        <span className="font-black uppercase tracking-tight">{type}</span>
+                        {appType === type && <Icon name="check" className="w-6 h-6 text-[#C8102E]" />}
                       </button>
                     ))}
                   </div>
@@ -197,9 +246,9 @@ const CatalogSearch: React.FC<CatalogSearchProps> = ({ onNavigate, onBack, state
               )}
 
               {currentStep === 2 && (
-                <section className="space-y-6 animate-ios">
+                <section className="space-y-8 animate-ios">
                   <div className="space-y-4">
-                    <label className="text-[11px] font-extrabold text-[#0B0F1A] uppercase tracking-widest">2. Manufacturer</label>
+                    <label className="text-[11px] font-poppins font-black text-black uppercase tracking-[0.2em] ml-1">2. Select Manufacturer</label>
                     <div className="relative">
                       <select 
                         value={manufacture} 
@@ -209,25 +258,24 @@ const CatalogSearch: React.FC<CatalogSearchProps> = ({ onNavigate, onBack, state
                           model: '',
                           currentStep: 3 
                         })}
-                        className="w-full bg-[#F2F2F7] border-none rounded-2xl py-6 px-6 text-[#0B0F1A] font-black appearance-none outline-none focus:ring-2 ring-[#C8102E]/20 text-xl"
+                        className="w-full bg-zinc-50 border border-zinc-200 rounded-3xl py-6 px-8 text-black font-poppins font-black appearance-none outline-none focus:ring-4 ring-[#C8102E]/10 text-xl shadow-sm"
                       >
-                        <option value="">Select Brand</option>
+                        <option value="">Search Brand...</option>
                         {manufactureOptions.map(m => <option key={m} value={m}>{m}</option>)}
                       </select>
-                      <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>
+                      <div className="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none text-[#C8102E]">
+                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M19 9l-7 7-7-7" /></svg>
                       </div>
                     </div>
                   </div>
 
-                  {/* Popular Brand Selection Grid */}
-                  <div className="space-y-4 pt-2">
+                  <div className="space-y-5 pt-4">
                     <div className="flex items-center justify-between px-1">
-                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Popular Brands</label>
-                      <div className="h-[1px] flex-1 bg-gray-100 ml-4"></div>
+                      <label className="text-[11px] font-poppins font-black text-black uppercase tracking-[0.25em]">Popular Makers</label>
+                      <div className="h-[2px] flex-1 bg-zinc-100 ml-6"></div>
                     </div>
                     
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-3 gap-4">
                       {POPULAR_BRANDS.map((brand) => (
                         <button
                           key={brand.name}
@@ -237,23 +285,23 @@ const CatalogSearch: React.FC<CatalogSearchProps> = ({ onNavigate, onBack, state
                             model: '',
                             currentStep: 3 
                           })}
-                          className={`flex flex-col items-center justify-center p-4 rounded-2xl border transition-all active:scale-95 group ${
+                          className={`flex flex-col items-center justify-center p-6 rounded-3xl border-2 transition-all active:scale-90 group shadow-sm ${
                             manufacture === brand.name 
-                              ? 'border-[#C8102E] bg-red-50/30' 
-                              : 'border-gray-100 bg-white hover:border-gray-300'
+                              ? 'border-[#C8102E] bg-red-50/50' 
+                              : 'border-zinc-100 bg-white'
                           }`}
                         >
-                          <div className="w-10 h-10 mb-2 flex items-center justify-center">
+                          <div className="w-12 h-12 mb-3 flex items-center justify-center">
                             <img 
                               src={brand.logo} 
                               alt={brand.name} 
-                              className={`max-w-full max-h-full object-contain grayscale transition-all ${
-                                manufacture === brand.name ? 'grayscale-0' : 'group-hover:grayscale-0'
+                              className={`max-w-full max-h-full object-contain transition-all duration-300 ${
+                                manufacture === brand.name ? 'scale-110' : 'opacity-90 hover:opacity-100'
                               }`}
                             />
                           </div>
-                          <span className={`text-[9px] font-black uppercase tracking-widest text-center ${
-                            manufacture === brand.name ? 'text-[#C8102E]' : 'text-gray-400'
+                          <span className={`text-[10px] font-poppins font-black uppercase tracking-widest text-center leading-none ${
+                            manufacture === brand.name ? 'text-[#C8102E]' : 'text-black'
                           }`}>
                             {brand.name}
                           </span>
@@ -263,85 +311,63 @@ const CatalogSearch: React.FC<CatalogSearchProps> = ({ onNavigate, onBack, state
                   </div>
                 </section>
               )}
-
-              {currentStep === 3 && (
-                <section className="space-y-4 animate-ios">
-                  <label className="text-[11px] font-extrabold text-[#0B0F1A] uppercase ml-1 tracking-widest">3. Make / Model</label>
-                  <div className="relative">
-                    <select 
-                      value={make} 
-                      onChange={(e) => updateState({ 
-                        make: e.target.value, 
-                        model: '',
-                        currentStep: 4 
-                      })}
-                      className="w-full bg-[#F2F2F7] border-none rounded-2xl py-6 px-6 text-[#0B0F1A] font-black appearance-none outline-none focus:ring-2 ring-[#C8102E]/20 text-xl"
-                    >
-                      <option value="">Select Series</option>
-                      {makeOptions.map(m => <option key={m} value={m}>{m}</option>)}
-                    </select>
-                    <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>
+              {currentStep > 2 && (
+                 <section className="space-y-6 animate-ios">
+                    <label className="text-[11px] font-poppins font-black text-black uppercase ml-1 tracking-[0.2em]">{currentStep}. Selection</label>
+                    <div className="relative">
+                      <select 
+                        value={currentStep === 3 ? make : model} 
+                        onChange={(e) => {
+                          if (currentStep === 3) updateState({ make: e.target.value, currentStep: 4 });
+                          else updateState({ model: e.target.value });
+                        }}
+                        className="w-full bg-zinc-50 border border-zinc-200 rounded-3xl py-8 px-8 text-black font-poppins font-black appearance-none outline-none focus:ring-4 ring-[#C8102E]/10 text-2xl shadow-sm uppercase"
+                      >
+                        <option value="">{currentStep === 3 ? "SELECT SERIES" : "SELECT VARIANT"}</option>
+                        {(currentStep === 3 ? makeOptions : modelOptions).map((m: any, i: number) => <option key={i} value={m}>{m}</option>)}
+                      </select>
+                      <div className="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none text-[#C8102E]">
+                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M19 9l-7 7-7-7" /></svg>
+                      </div>
                     </div>
-                  </div>
-                </section>
-              )}
-
-              {currentStep === 4 && (
-                <section className="space-y-4 animate-ios">
-                  <label className="text-[11px] font-extrabold text-[#0B0F1A] uppercase ml-1 tracking-widest">4. Variant / Specification</label>
-                  <div className="relative">
-                    <select 
-                      value={model} 
-                      onChange={(e) => updateState({ model: e.target.value })}
-                      className="w-full bg-[#F2F2F7] border-none rounded-2xl py-6 px-6 text-[#0B0F1A] font-black appearance-none outline-none focus:ring-2 ring-[#C8102E]/20 text-xl"
-                    >
-                      <option value="">Select Variant</option>
-                      {modelOptions.map((m, i) => <option key={i} value={m}>{m}</option>)}
-                    </select>
-                    <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>
-                    </div>
-                  </div>
-                </section>
+                 </section>
               )}
             </>
           ) : (
-            <section className="space-y-4 animate-ios">
-              <label className="text-[11px] font-extrabold text-[#0B0F1A] uppercase ml-1 tracking-widest">Enter Part Number</label>
+            <section className="space-y-6 animate-ios">
+              <label className="text-[11px] font-poppins font-black text-black uppercase ml-1 tracking-[0.2em]">Enter Part Number</label>
               <div className="relative">
-                <Icon name="search" className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400" />
+                <Icon name="search" className="absolute left-8 top-1/2 -translate-y-1/2 w-8 h-8 text-[#C8102E]" />
                 <input 
                   type="text"
                   placeholder="e.g. BKR6EIX"
                   value={partNumber}
                   onChange={(e) => updateState({ partNumber: e.target.value.toUpperCase() })}
-                  className="w-full bg-[#F2F2F7] border-none rounded-2xl py-6 pl-16 pr-6 text-[#0B0F1A] font-black placeholder-gray-300 outline-none focus:ring-2 ring-[#C8102E]/20 text-xl tracking-tight"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-3xl py-8 pl-20 pr-8 text-black font-poppins font-black placeholder-zinc-300 outline-none focus:ring-4 ring-[#C8102E]/10 text-3xl tracking-tight shadow-sm"
                 />
               </div>
-              <p className="text-[10px] text-gray-400 font-bold px-1 uppercase tracking-tighter">Enter at least 3 characters to search the global technical database.</p>
+              <p className="text-[11px] text-zinc-950 font-poppins font-black px-1 uppercase tracking-tight leading-relaxed">Search our global technical database with at least 3 characters.</p>
             </section>
           )}
 
           {!isStepValid() && (
-            <div className="flex flex-col items-center justify-center py-12 text-center text-gray-400">
-              <Icon name="info" className="w-12 h-12 mb-4 opacity-20" />
-              <p className="text-sm font-bold max-w-[280px]">Complete this selection to proceed.</p>
+            <div className="flex flex-col items-center justify-center py-20 text-center text-zinc-950">
+              <Icon name="info" className="w-16 h-16 mb-6 opacity-30" />
+              <p className="text-[13px] font-poppins font-black uppercase tracking-widest max-w-[240px]">Fill required fields to continue</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Sticky Bottom Button */}
-      <div className="bg-white/80 backdrop-blur-md border-t border-gray-100 px-6 py-6 fixed bottom-0 left-0 right-0 max-w-md mx-auto z-20">
+      <div className="bg-white/95 backdrop-blur-xl border-t border-zinc-100 px-8 py-8 fixed bottom-0 left-0 right-0 max-w-md mx-auto z-50 rounded-t-[40px] shadow-[0_-20px_50px_rgba(0,0,0,0.08)]">
         <button 
           disabled={!isStepValid()}
           onClick={handleNextStep}
-          className={`w-full py-5 rounded-2xl text-base font-black uppercase tracking-wider transition-all active:scale-95 shadow-lg disabled:opacity-50 disabled:grayscale ${
-            (searchMode === 'vehicle' && currentStep < 4) ? 'bg-[#5B6271] text-white' : 'bg-[#C8102E] text-white'
+          className={`w-full py-6 rounded-[24px] text-base font-poppins font-black uppercase tracking-[0.2em] transition-all active:scale-[0.98] shadow-2xl disabled:opacity-30 disabled:grayscale ${
+            (searchMode === 'vehicle' && currentStep < 4) ? 'bg-zinc-950 text-white' : 'bg-[#C8102E] text-white shadow-red-500/20'
           }`}
         >
-          {searchMode === 'vehicle' && currentStep < 4 ? 'Continue Selection' : 'Find Compatible Parts'}
+          {searchMode === 'vehicle' && currentStep < 4 ? 'Continue Setup' : 'Search Database'}
         </button>
       </div>
     </div>

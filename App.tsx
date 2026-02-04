@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ScreenId, UserRole, Vehicle } from './types';
 import SplashScreen from './screens/SplashScreen';
@@ -97,7 +96,8 @@ const App: React.FC = () => {
 
   const renderScreen = () => {
     const commonHeaderProps = {
-      onProfile: () => navigateTo('user_profile'),
+      // Repurposed onProfile to navigate home as the icon is now a home icon
+      onProfile: () => navigateTo('user_home'),
       onOpenMenu: () => setIsDrawerOpen(true),
     };
 

@@ -79,10 +79,10 @@ const Product3DViewer: React.FC<{ imageUrl: string; isFullScreen?: boolean; onCl
     return (
       <div className="fixed inset-0 z-[250] bg-black/95 flex flex-col items-center justify-center animate-ios backdrop-blur-xl touch-none">
         <div className="absolute top-12 left-6 z-[260]">
-          <h2 className="text-white font-black text-[10px] uppercase tracking-[0.3em]">360° Technical Inspection</h2>
+          <h2 className="text-white font-poppins font-semibold text-[10px] uppercase tracking-[0.3em]">360° Technical Inspection</h2>
         </div>
         <button onClick={onClose} className="absolute top-10 right-6 z-[260] p-4 bg-white/10 rounded-full text-white active:scale-90 shadow-2xl border border-white/10 backdrop-blur-md">
-          <Icon name="close" className="w-6 h-6" />
+          <Icon name="close" className="w-7 h-7" />
         </button>
         
         <div 
@@ -97,14 +97,14 @@ const Product3DViewer: React.FC<{ imageUrl: string; isFullScreen?: boolean; onCl
         </div>
 
         <div className="absolute bottom-12 flex flex-col items-center space-y-2">
-          <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.4em]">Pinch to Zoom • Drag to Rotate</p>
+          <p className="text-white/60 text-[9px] font-poppins font-semibold uppercase tracking-[0.4em]">Pinch to Zoom • Drag to Rotate</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full h-[240px] bg-[#F8F9FA] flex items-center justify-center rounded-[32px] overflow-hidden border border-gray-100 shadow-inner touch-none">
+    <div className="relative w-full h-[240px] bg-[#F8F9FA] flex items-center justify-center rounded-[32px] overflow-hidden border border-zinc-200 shadow-inner touch-none">
       <div 
         className="w-full h-full flex flex-col items-center justify-center transition-transform duration-75 cursor-grab active:cursor-grabbing" 
         style={{ perspective: '1000px' }}
@@ -115,9 +115,9 @@ const Product3DViewer: React.FC<{ imageUrl: string; isFullScreen?: boolean; onCl
         <div style={{ transform: `rotateY(${rotation}deg) scale(${zoom})`, transition: isDragging.current ? 'none' : 'transform 0.1s linear' }}>
           <img src={imageUrl} alt="Part" className="max-w-[140px] max-h-[140px] object-contain drop-shadow-2xl select-none" draggable={false} />
         </div>
-        <p className="text-[8px] font-black text-gray-300 uppercase tracking-[0.2em] mt-3">PINCH TO MAGNIFY • DRAG TO ROTATE</p>
+        <p className="text-[8px] font-poppins font-semibold text-zinc-900 uppercase tracking-[0.2em] mt-3">PINCH TO MAGNIFY • DRAG TO ROTATE</p>
       </div>
-      <div className="absolute top-4 left-4 bg-[#C8102E] text-white text-[7px] font-black px-2.5 py-1 rounded-md uppercase tracking-[0.1em] shadow-lg shadow-red-500/10 flex items-center space-x-1 pointer-events-none">
+      <div className="absolute top-4 left-4 bg-[#C8102E] text-white text-[7px] font-poppins font-semibold px-2.5 py-1 rounded-md uppercase tracking-[0.1em] shadow-lg shadow-red-500/10 flex items-center space-x-1 pointer-events-none">
         <div className="w-1 h-1 bg-white rounded-full animate-pulse"></div>
         <span>3D MAGNIFICATION</span>
       </div>
@@ -125,7 +125,6 @@ const Product3DViewer: React.FC<{ imageUrl: string; isFullScreen?: boolean; onCl
   );
 };
 
-// Interface for SearchResults component props
 interface SearchResultsProps {
   onNavigate: (screen: ScreenId) => void;
   onBack: () => void;
@@ -139,7 +138,6 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
   const [isCheckingStock, setIsCheckingStock] = useState(false);
   const [stockStatus, setStockStatus] = useState<string | null>(null);
   
-  // Swipe Logic Refs for card navigation
   const touchStartX = useRef<number | null>(null);
   const swipeMinDistance = 60;
 
@@ -202,7 +200,6 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
   };
 
   const handleContainerTouchStart = (e: React.TouchEvent) => {
-    // Only handle swipe if it's 1 finger and not on the 3D viewer (which uses touch-none)
     if (e.touches.length === 1) {
       touchStartX.current = e.touches[0].clientX;
     }
@@ -210,16 +207,11 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
 
   const handleContainerTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null || selectedIndex === null) return;
-    
     const touchEndX = e.changedTouches[0].clientX;
     const distance = touchStartX.current - touchEndX;
-
     if (Math.abs(distance) > swipeMinDistance) {
-      if (distance > 0) {
-        handleNextProduct();
-      } else {
-        handlePrevProduct();
-      }
+      if (distance > 0) handleNextProduct();
+      else handlePrevProduct();
     }
     touchStartX.current = null;
   };
@@ -231,12 +223,12 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
       <Header title="VERIFIED PARTS" onBack={onBack} onProfile={onProfile} />
       
       <div className="flex-1 overflow-y-auto p-5 space-y-4 animate-ios pb-20">
-        <div className="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 mb-2 flex items-center justify-between">
+        <div className="p-4 bg-white rounded-2xl shadow-sm border border-zinc-200 mb-2 flex items-center justify-between">
           <div>
-            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Active Reference</p>
-            <h4 className="font-bold text-black text-sm uppercase truncate max-w-[200px]">{activeVehicle || 'Global Database'}</h4>
+            <p className="text-[9px] font-poppins font-semibold text-zinc-950 uppercase tracking-widest">Active Reference</p>
+            <h4 className="font-poppins font-semibold text-black text-sm uppercase truncate max-w-[200px]">{activeVehicle || 'Global Database'}</h4>
           </div>
-          <Icon name="cog" className="w-5 h-5 text-gray-200" />
+          <Icon name="cog" className="w-6 h-6 text-zinc-400" />
         </div>
 
         {results.map((item, index) => (
@@ -244,10 +236,10 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
             <div className="flex justify-between items-start mb-3">
               <div className="space-y-1 flex-1">
                 <Badge variant={item.isCompatible ? 'success' : 'danger'}>{item.isCompatible ? 'Verified fit' : 'Incompatible'}</Badge>
-                <h3 className="font-black text-black text-base uppercase mt-1 tracking-tight">{item.name}</h3>
-                <p className="text-xs font-black text-[#C8102E] tracking-tighter">{item.partNumber}</p>
+                <h3 className="font-poppins font-semibold text-black text-base uppercase mt-1 tracking-tight">{item.name}</h3>
+                <p className="text-xs font-poppins font-semibold text-[#C8102E] tracking-tighter">{item.partNumber}</p>
               </div>
-              <Icon name="heart" className="w-5 h-5 text-gray-200" />
+              <Icon name="heart" className="w-6 h-6 text-zinc-400" />
             </div>
             <Button onClick={() => setSelectedIndex(index)} variant="black" className="py-3.5 text-[10px]">View Technical Specs</Button>
           </Card>
@@ -255,21 +247,21 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
       </div>
 
       <Modal 
-        isOpen={!!selectedProduct} 
+        // Fix for type error: Ensuring isOpen receives a boolean value by checking if selectedProduct is not null
+        isOpen={selectedProduct !== null} 
         onClose={() => { setSelectedIndex(null); setStockStatus(null); }} 
-        title={selectedProduct?.partNumber || "PART DETAILS"}
+        title="PRODUCT DETAILS"
       >
         <div 
           className="flex flex-col h-full bg-white relative animate-ios touch-pan-y"
           onTouchStart={handleContainerTouchStart}
           onTouchEnd={handleContainerTouchEnd}
         >
-          {/* Swiper Progress Dots */}
           <div className="absolute top-0 left-0 right-0 flex justify-center space-x-1.5 py-1 z-30 pointer-events-none">
             {results.map((_, idx) => (
               <div 
                 key={idx} 
-                className={`h-1 rounded-full transition-all duration-300 ${idx === selectedIndex ? 'w-4 bg-[#C8102E]' : 'w-1 bg-gray-200'}`}
+                className={`h-1 rounded-full transition-all duration-300 ${idx === selectedIndex ? 'w-4 bg-[#C8102E]' : 'w-1 bg-zinc-400'}`}
               />
             ))}
           </div>
@@ -282,29 +274,29 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
             <section className="animate-ios space-y-1">
               <div className="flex items-center space-x-2 mb-1">
                 <Badge variant="success">VERIFIED FIT</Badge>
-                <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{selectedProduct?.category}</span>
+                <span className="text-[9px] font-poppins font-semibold text-zinc-950 uppercase tracking-widest">{selectedProduct?.category}</span>
               </div>
-              <h1 className="text-2xl font-black text-black leading-tight uppercase tracking-tight">
+              <h1 className="text-2xl font-poppins font-semibold text-black leading-tight uppercase tracking-tight">
                 {selectedProduct?.name}
               </h1>
-              <p className="text-[#C8102E] font-black text-lg tracking-tighter">
+              <p className="text-[#C8102E] font-poppins font-semibold text-lg tracking-tighter">
                 {selectedProduct?.partNumber}
               </p>
             </section>
 
             {stockStatus && (
-              <div className="bg-green-50 p-4 rounded-2xl border border-green-100 animate-ios">
-                <p className="text-[10px] font-black text-green-700 uppercase tracking-tight">{stockStatus}</p>
+              <div className="bg-green-50 p-4 rounded-2xl border border-green-200 animate-ios">
+                <p className="text-[10px] font-poppins font-semibold text-green-900 uppercase tracking-tight">{stockStatus}</p>
               </div>
             )}
 
             <section className="animate-ios space-y-3">
               <div className="flex items-center space-x-2">
-                <Icon name="info" className="w-3.5 h-3.5 text-gray-400" />
-                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">TECHNICAL SPECIFICATIONS</h3>
+                <Icon name="info" className="w-4 h-4 text-zinc-950" />
+                <h3 className="text-[10px] font-poppins font-semibold text-zinc-950 uppercase tracking-widest">TECHNICAL SPECIFICATIONS</h3>
               </div>
               
-              <div className="bg-[#F8F9FA] rounded-[24px] overflow-hidden border border-gray-100 divide-y divide-gray-50">
+              <div className="bg-[#F8F9FA] rounded-[24px] overflow-hidden border border-zinc-200 divide-y divide-zinc-200">
                 {[
                   { label: 'Year', value: activeVehicle.split(' ').pop() || '2021+' },
                   { label: 'Front Picto', value: selectedProduct?.details?.frontPicto },
@@ -321,42 +313,42 @@ const SearchResults: React.FC<SearchResultsProps> = ({ onNavigate, onBack, activ
                   { label: 'Rear Protection Kit', value: selectedProduct?.details?.rearProtectionKit },
                 ].map((spec, i) => (
                   <div key={i} className="flex justify-between items-center p-3.5">
-                    <span className="text-[9px] font-bold text-gray-400 uppercase tracking-tight">{spec.label}</span>
-                    <span className="text-[10px] font-black text-black uppercase">{spec.value || 'N/A'}</span>
+                    <span className="text-[9px] font-poppins font-semibold text-zinc-950 uppercase tracking-tight">{spec.label}</span>
+                    <span className="text-[10px] font-poppins font-bold text-black uppercase">{spec.value || 'N/A'}</span>
                   </div>
                 ))}
               </div>
             </section>
           </div>
 
-          <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md px-4 pt-4 pb-10 border-t border-gray-100 z-[160] max-w-md mx-auto shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-            <div className="flex flex-row space-x-2 w-full h-14">
+          <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md px-4 pt-4 pb-10 border-t border-zinc-200 z-[160] max-w-md mx-auto shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+            <div className="flex flex-row space-x-2 w-full h-16">
               <button 
                 onClick={handleCheckStock}
                 disabled={isCheckingStock}
-                className="flex-1 bg-white border border-gray-200 text-black rounded-xl text-[9px] font-black uppercase tracking-tight shadow-sm active:scale-[0.98] transition-all flex flex-col items-center justify-center disabled:opacity-50"
+                className="flex-1 bg-white border-2 border-zinc-200 text-black rounded-xl text-[9px] font-poppins font-bold uppercase tracking-tight shadow-sm active:scale-[0.98] transition-all flex flex-col items-center justify-center disabled:opacity-50"
               >
                 {isCheckingStock ? (
-                  <div className="w-4 h-4 border-2 border-black/10 border-t-black rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-black/10 border-t-black rounded-full animate-spin"></div>
                 ) : (
                   <>
-                    <Icon name="search" className="w-4 h-4 mb-0.5" />
+                    <Icon name="search" className="w-5 h-5 mb-1" />
                     <span>Stock</span>
                   </>
                 )}
               </button>
               <button 
                 onClick={() => { setSelectedIndex(null); onNavigate('technical_enquiry'); }}
-                className="flex-1 bg-black text-white rounded-xl text-[9px] font-black uppercase tracking-tight shadow-md active:scale-[0.98] transition-all flex flex-col items-center justify-center"
+                className="flex-1 bg-black text-white rounded-xl text-[9px] font-poppins font-bold uppercase tracking-tight shadow-md active:scale-[0.98] transition-all flex flex-col items-center justify-center"
               >
-                <Icon name="cog" className="w-4 h-4 mb-0.5 text-white/70" />
+                <Icon name="cog" className="w-5 h-5 mb-1 text-white/90" />
                 <span>Enquiry</span>
               </button>
               <button 
                 onClick={() => { setSelectedIndex(null); onNavigate('dealer_locator'); }}
-                className="flex-1 bg-[#C8102E] text-white rounded-xl text-[9px] font-black uppercase tracking-tight shadow-md active:scale-[0.98] transition-all flex flex-col items-center justify-center"
+                className="flex-1 bg-[#C8102E] text-white rounded-xl text-[9px] font-poppins font-bold uppercase tracking-tight shadow-md active:scale-[0.98] transition-all flex flex-col items-center justify-center"
               >
-                <Icon name="store" className="w-4 h-4 mb-0.5 text-white/70" />
+                <Icon name="store" className="w-5 h-5 mb-1 text-white/90" />
                 <span>Dealers</span>
               </button>
             </div>
